@@ -1,0 +1,217 @@
+# Copa de la Domiciliación 2026 - Dashboard Optimizado para 500+ Asesores
+
+## 🎯 ¿Qué hay de nuevo?
+
+Este dashboard está **optimizado para manejar 500+ asesores** de forma eficiente y profesional.
+
+## ✨ Características Principales
+
+### 1. 📊 **Estadísticas Generales**
+- Total de asesores
+- Total de domiciliaciones
+- Conteo por categoría (Delanteros, Mediocampistas, Defensas, Reservas)
+
+### 2. 🏆 **Campo de los Mejores**
+- Muestra solo los TOP performers en el campo de fútbol
+- Selector para elegir cuántos mostrar: 10, 20, 30, 50 o 100
+- Badges de posición: 🥇 Oro (#1), 🥈 Plata (#2), 🥉 Bronce (#3)
+- Ranking visible en cada tarjeta
+
+### 3. 📋 **Tabla Completa con Funcionalidades Avanzadas**
+
+#### Búsqueda:
+- Campo de búsqueda en tiempo real
+- Busca por nombre de asesor
+
+#### Filtros:
+- Filtrar por **Área** (Ventas, Operaciones, Servicio al Cliente, etc.)
+- Filtrar por **Categoría** (Todas, Delanteros, Mediocampistas, Defensas, Reservas)
+- Seleccionar filas por página (25, 50, 100, o Todos)
+
+#### Ordenamiento:
+- Haz clic en cualquier columna para ordenar (Nombre, Área, Domiciliaciones, Categoría)
+- Indicadores visuales (↑↓) muestran el orden actual
+
+#### Paginación:
+- Navega entre páginas fácilmente
+- Botones Anterior/Siguiente
+- Muestra página actual y total
+
+## 🚀 Cómo Actualizar los Datos
+
+### **Opción 1: Manual** (Editar directamente el HTML)
+
+1. Abre `copa_dashboard_optimizado.html` con un editor de texto
+2. Busca la línea que dice: `const datosAsesores = [`
+3. Edita/agrega/elimina asesores:
+
+```javascript
+const datosAsesores = [
+    {nombre: "Juan Pérez", domiciliaciones: 15, area: "Ventas"},
+    {nombre: "María González", domiciliaciones: 12, area: "Operaciones"},
+    // Agrega más asesores aquí...
+];
+```
+
+4. Guarda y abre en el navegador
+
+### **Opción 2: Automática** (Usando Python)
+
+1. Edita `datos.csv`:
+```csv
+Nombre,Domiciliaciones,Area
+Juan Pérez,15,Ventas
+María González,12,Operaciones
+Carlos López,8,Servicio al Cliente
+... (hasta 500+ asesores)
+```
+
+2. Ejecuta: `python actualizar_copa.py`
+
+3. Abre el HTML actualizado
+
+## 📊 Formato del CSV para 500 Asesores
+
+```csv
+Nombre,Domiciliaciones,Area
+Asesor 1,25,Ventas
+Asesor 2,23,Operaciones
+Asesor 3,20,Servicio al Cliente
+... (continúa hasta 500+)
+```
+
+**Tips para CSV grandes:**
+- Usa Excel o Google Sheets para crear/editar el CSV
+- Las columnas deben ser: **Nombre**, **Domiciliaciones**, **Area** (en ese orden)
+- Asegúrate de que no haya líneas vacías
+- Verifica que todos los números sean válidos
+- Si un asesor no tiene área, se mostrará como "Sin área"
+
+## 🎮 Cómo Usar el Dashboard
+
+### Para Administradores:
+1. Actualiza los datos regularmente
+2. Selecciona cuántos TOP mostrar en el campo
+3. Comparte el archivo HTML con el equipo
+
+### Para Asesores:
+1. Abre el archivo HTML en cualquier navegador
+2. Usa la búsqueda para encontrarte rápidamente (escribe tu nombre)
+3. Filtra por categoría para ver tu competencia
+4. Navega la tabla para ver todos los asesores
+
+## 🔍 Funciones Interactivas
+
+### Búsqueda Rápida:
+- Escribe en el campo de búsqueda
+- Los resultados se filtran instantáneamente
+- Busca por nombre completo o parcial
+
+### Filtros:
+- **Por Categoría**: Ve solo Delanteros, Mediocampistas, etc.
+- **Filas por Página**: Controla cuántos asesores ver a la vez
+
+### Ordenamiento:
+- Haz clic en "Domiciliaciones" para ordenar de mayor a menor
+- Haz clic en "Nombre" para orden alfabético
+- Haz clic en "Categoría" para agrupar por tipo
+
+### TOP Performers:
+- Cambia el selector para mostrar TOP 10, 20, 30, 50 o 100
+- Los TOP 3 tienen medallas especiales (🥇🥈🥉)
+- Cada tarjeta muestra su ranking (#1, #2, #3...)
+
+## 💡 Ventajas para 500+ Asesores
+
+✅ **Rendimiento**: Carga rápida incluso con cientos de asesores
+✅ **Navegación**: Búsqueda, filtros y paginación hacen fácil encontrar a cualquiera
+✅ **Visual**: Campo de fútbol solo para los mejores (no sobrecargado)
+✅ **Profesional**: Tabla completa con todas las funciones esperadas
+✅ **Motivación**: Rankings, medallas y premios visibles
+
+## 📱 Compatibilidad
+
+- ✅ Chrome, Firefox, Edge, Safari
+- ✅ Dispositivos móviles (responsive)
+- ✅ Tablets
+- ✅ Funciona sin internet (una vez descargado)
+
+## 🎯 Categorías y Premios (Acumulativos)
+
+**IMPORTANTE**: Los premios son acumulativos. Mientras más domiciliaciones, más premios por los que participas.
+
+### 🔴 Delanteros (12+ domiciliaciones)
+**Participan por:**
+- 📺 2 Pantallas 40"
+- 👕 3 Playeras Oficiales  
+- ⚽ 5 Balones Training
+
+### 🔵 Mediocampistas (8-11 domiciliaciones)
+**Participan por:**
+- 👕 3 Playeras Oficiales
+- ⚽ 5 Balones Training
+
+### 🟡 Defensas (4-7 domiciliaciones)
+**Participan por:**
+- ⚽ 5 Balones Training
+
+### ⚪ Reservas (1-3 domiciliaciones)
+En banca, calentando ⏱️
+
+**Ejemplo:** Si tienes 15 domiciliaciones, estás en la categoría de Delantero y participas en el sorteo de las pantallas, las playeras Y los balones. ¡Más oportunidades de ganar!
+
+## 🔄 Compartir con el Equipo
+
+### Método 1: Email/WhatsApp
+- Envía directamente el archivo HTML
+- Los asesores lo abren en su navegador
+- Actualiza y reenvía cuando cambien los datos
+
+### Método 2: Google Drive (Recomendado)
+1. Sube `copa_dashboard_optimizado.html` a Drive
+2. Comparte el link con permisos de "Ver"
+3. Actualiza el archivo cuando sea necesario (mismo link)
+
+### Método 3: Servidor Web
+- Sube a un hosting gratuito (GitHub Pages, Netlify, etc.)
+- Comparte la URL
+- Actualiza cuando quieras
+
+## 🆘 Solución de Problemas
+
+**La tabla está vacía:**
+- Verifica que los datos en `datosAsesores` estén correctos
+- Revisa que el formato sea: `{nombre: "...", domiciliaciones: número}`
+
+**La búsqueda no funciona:**
+- Recarga la página (Ctrl + F5)
+- Verifica que estés escribiendo en el campo correcto
+
+**Los datos no se actualizan:**
+- Borra el caché del navegador
+- Verifica que editaste el archivo correcto
+- Asegúrate de guardar después de editar
+
+**Rendimiento lento con muchos asesores:**
+- Reduce las filas por página (usa 25 o 50 en lugar de "Todos")
+- Usa filtros para reducir los resultados mostrados
+
+## 📈 Ejemplo de Uso
+
+**Escenario**: Tienes 500 asesores y quieres:
+
+1. **Ver los TOP 20** → Selecciona "20 Asesores" en el campo
+2. **Encontrar a "María González"** → Escribe "María" en la búsqueda
+3. **Ver todos los Delanteros** → Filtra por "Delanteros"
+4. **Ver solo asesores de Ventas** → Filtra por área "Ventas"
+5. **Ver TOP de Operaciones** → Filtra por área "Operaciones", luego ordena por domiciliaciones
+6. **Ver quién va primero** → Mira la tabla (automáticamente ordenada por domiciliaciones)
+
+## ✨ Próximas Mejoras (Opcionales)
+
+Si necesitas más funcionalidades, puedo agregar:
+- Exportar a Excel
+- Gráficas de progreso
+- Comparación entre periodos
+- Alertas de cambios de posición
+- Sistema de notificaciones

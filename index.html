@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copa de la Domiciliación 2026 - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .stats-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-box-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .top-performers-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .top-performers-section h2 {
+            color: #2a5298;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .top-limit-selector {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .top-limit-selector label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .top-limit-selector select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 2px solid #2a5298;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .field-container {
+            background: linear-gradient(90deg, #2d5016 0%, #3a6b1f 50%, #2d5016 100%);
+            border-radius: 15px;
+            padding: 40px;
+            position: relative;
+            min-height: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .field-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border: 3px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+        }
+
+        .center-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 100%;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .penalty-area {
+            position: absolute;
+            width: 200px;
+            height: 250px;
+            border: 3px solid rgba(255,255,255,0.5);
+        }
+
+        .penalty-area.top {
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: none;
+        }
+
+        .penalty-area.bottom {
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom: none;
+        }
+
+        .formation-zone {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .zone-title {
+            text-align: center;
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .players-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 15px 0;
+        }
+
+        .player-card {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            width: 160px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .player-jersey {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+
+        .delantero .player-jersey {
+            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+        }
+
+        .mediocampista .player-jersey {
+            background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);
+        }
+
+        .defensa .player-jersey {
+            background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+        }
+
+        .reserva .player-jersey {
+            background: linear-gradient(135deg, #757575 0%, #a8a8a8 100%);
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .player-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 2px solid #eee;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2a5298;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: #666;
+        }
+
+        .prize-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            min-width: 35px;
+            height: 35px;
+            padding: 0 5px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.95);
+            z-index: 10;
+        }
+
+        .rank-badge {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+        }
+
+        .rank-badge.other {
+            background: linear-gradient(135deg, #4776e6 0%, #2a5298 100%);
+        }
+
+        .table-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .table-section h2 {
+            color: #2a5298;
+            margin-bottom: 15px;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .filter-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-box select {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .filter-box select:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        thead {
+            background: #2a5298;
+            color: white;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: #1e3c72;
+        }
+
+        th.sortable::after {
+            content: ' ↕';
+            opacity: 0.5;
+        }
+
+        th.sorted-asc::after {
+            content: ' ↑';
+            opacity: 1;
+        }
+
+        th.sorted-desc::after {
+            content: ' ↓';
+            opacity: 1;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        td {
+            padding: 12px;
+        }
+
+        .categoria-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .categoria-badge.delantero {
+            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+        }
+
+        .categoria-badge.mediocampista {
+            background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);
+        }
+
+        .categoria-badge.defensa {
+            background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+        }
+
+        .categoria-badge.reserva {
+            background: linear-gradient(135deg, #757575 0%, #a8a8a8 100%);
+        }
+
+        .area-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #90caf9;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            border: 2px solid #2a5298;
+            background: white;
+            color: #2a5298;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #2a5298;
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination span {
+            font-weight: bold;
+        }
+
+        .legend {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .legend h3 {
+            margin-bottom: 15px;
+            color: #2a5298;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚽ La Copa de la Domiciliación 2026 ⚽</h1>
+            <p style="font-size: 1.2em;">Dashboard de Competencia</p>
+        </header>
+
+        <div class="stats-summary">
+            <h3 style="color: #2a5298; margin-bottom: 10px;">📊 Resumen General</h3>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-box-value" id="totalAsesores">0</div>
+                    <div class="stat-box-label">Total Asesores</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value" id="totalDomiciliaciones">0</div>
+                    <div class="stat-box-label">Total Domiciliaciones</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value" id="delanteros">0</div>
+                    <div class="stat-box-label">⭐ Delanteros (12+)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value" id="mediocampistas">0</div>
+                    <div class="stat-box-label">💪 Mediocampistas (8-11)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value" id="defensas">0</div>
+                    <div class="stat-box-label">🛡️ Defensas (4-7)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value" id="reservas">0</div>
+                    <div class="stat-box-label">📋 Reservas (1-3)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-performers-section">
+            <h2>🏆 Campo de los Mejores Asesores</h2>
+            <div class="top-limit-selector">
+                <label for="topLimit">Mostrar TOP:</label>
+                <select id="topLimit" onchange="updateTopPerformers()">
+                    <option value="10">10 Asesores</option>
+                    <option value="20" selected>20 Asesores</option>
+                    <option value="30">30 Asesores</option>
+                    <option value="50">50 Asesores</option>
+                    <option value="100">100 Asesores</option>
+                </select>
+            </div>
+
+            <div class="field-container">
+                <div class="field-lines">
+                    <div class="center-line"></div>
+                    <div class="center-circle"></div>
+                    <div class="penalty-area top"></div>
+                    <div class="penalty-area bottom"></div>
+                </div>
+
+                <div id="fieldContent"></div>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <h2>📋 Ranking Completo de Asesores</h2>
+            
+            <div class="table-controls">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Buscar por nombre..." onkeyup="filterTable()">
+                </div>
+                <div class="filter-box">
+                    <label for="areaFilter"><strong>Área:</strong></label>
+                    <select id="areaFilter" onchange="filterTable()">
+                        <option value="all">Todas</option>
+                    </select>
+                </div>
+                <div class="filter-box">
+                    <label for="categoriaFilter"><strong>Categoría:</strong></label>
+                    <select id="categoriaFilter" onchange="filterTable()">
+                        <option value="all">Todas</option>
+                        <option value="delantero">Delanteros</option>
+                        <option value="mediocampista">Mediocampistas</option>
+                        <option value="defensa">Defensas</option>
+                        <option value="reserva">Reservas</option>
+                    </select>
+                </div>
+                <div class="filter-box">
+                    <label for="rowsPerPage"><strong>Filas:</strong></label>
+                    <select id="rowsPerPage" onchange="changeRowsPerPage()">
+                        <option value="25">25</option>
+                        <option value="50" selected>50</option>
+                        <option value="100">100</option>
+                        <option value="all">Todos</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="asesoresTable">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortTable(0)">#</th>
+                            <th class="sortable" onclick="sortTable(1)">Nombre</th>
+                            <th class="sortable" onclick="sortTable(2)">Área</th>
+                            <th class="sortable" onclick="sortTable(3)">Domiciliaciones</th>
+                            <th class="sortable" onclick="sortTable(4)">Categoría</th>
+                            <th class="sortable" onclick="sortTable(5)">Premio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </div>
+
+        <div class="legend">
+            <h3>📋 Leyenda de Categorías y Premios (Acumulativos)</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);"></div>
+                    <div>
+                        <strong>Delanteros (12+)</strong><br>
+                        <span style="font-size: 0.9em;">Participan por: 📺 Pantalla 40" + 👕 Playera Oficial + ⚽ Balón Training</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);"></div>
+                    <div>
+                        <strong>Mediocampistas (8-11)</strong><br>
+                        <span style="font-size: 0.9em;">Participan por: 👕 Playera Oficial + ⚽ Balón Training</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);"></div>
+                    <div>
+                        <strong>Defensas (4-7)</strong><br>
+                        <span style="font-size: 0.9em;">Participan por: ⚽ Balón Training</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #757575 0%, #a8a8a8 100%);"></div>
+                    <div>
+                        <strong>Reservas (1-3)</strong><br>
+                        <span style="font-size: 0.9em;">En banca, calentando ⏱️</span>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 5px; border: 1px solid #ffc107;">
+                <strong>ℹ️ Importante:</strong> Los premios son acumulativos. Si tienes 12+ domiciliaciones, participas por TODOS los premios (TV + Playera + Balón). Si tienes 8-11, participas por Playera + Balón.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // DATOS DE ASESORES - EDITA ESTA SECCIÓN
+        // ============================================
+        const datosAsesores = [
+            {nombre: "AVALOS ESTRADA ALEJANDRA", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "GUTIERREZ RIVERA ALEJANDRA", domiciliaciones: 3, area: "EE MEXICO"},
+            {nombre: "SOTO PULIDO ALFREDO", domiciliaciones: 5, area: "EE LATAM"},
+            {nombre: "CORTEZ ALGUIAR ANDREA ALEJANDRA", domiciliaciones: 1, area: "COBRANZA LATAM"},
+            {nombre: "MONTERROSA OJEDA ANDREA MARGARITA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "WILCHES BARRETO ANGELICA MARIA", domiciliaciones: 2, area: "EE LATAM"},
+            {nombre: "FORERO OCHOA ANGIE TATIANA", domiciliaciones: 3, area: "EE LATAM"},
+            {nombre: "PALOMINO MORALES ALEJANDRA", domiciliaciones: 10, area: "EE MEXICO"},
+            {nombre: "SALAS VARGAS ANA KAREN", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "VELAZQUEZ PICAZO ANA KAREN", domiciliaciones: 2, area: "EE MEXICO"},
+            {nombre: "CARAZZA GAMARRA BRENDA JANNIRA", domiciliaciones: 4, area: "EE LATAM"},
+            {nombre: "BUITRAGO MEDINA BRIGITH ADRIANA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "RODRIGUEZ CORTES ANDREA CATALINA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "CARACHEO SANCHEZ CAROLINA", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "HERNANDEZ LANDA CATALINA", domiciliaciones: 3, area: "EE MEXICO"},
+            {nombre: "ALEJANDRO DE LA CRUZ CLARISSA ALISSON", domiciliaciones: 2, area: "EE LATAM"},
+            {nombre: "ROJAS AREVALO DERLLY YINETH", domiciliaciones: 9, area: "EE LATAM"},
+            {nombre: "MALLMA LAURA FABIOLA ESTEPHANI", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "MARQUEZ CRUZ FRANCISCO", domiciliaciones: 2, area: "EE MEXICO"},
+            {nombre: "MUÑOZ ROSAS FABIOLA", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "GIL BARRERA GERALDIN", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "TORRES GASPAR HECTOR ALEJANDRO", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "ALVAREZ BELLIDO ISMAEL JESUS", domiciliaciones: 1, area: "COBRANZA LATAM"},
+            {nombre: "CAMACHO MAXINEZ JESSICA CAROLINA", domiciliaciones: 3, area: "EE MEXICO"},
+            {nombre: "NICOLAS CRUZ JESSICA", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "GOMEZ HERNANDEZ JESSICA VALERIA", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "SANCHEZ ARIAS JHOAN", domiciliaciones: 1, area: "COBRANZA LATAM"},
+            {nombre: "SIERRA ORTEGA JUAN DAVID", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "TELLEZ PEREZ JESUS ANTONIO", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "TORRES DAZA JOSE LUIS", domiciliaciones: 2, area: "COBRANZA MEXICO"},
+            {nombre: "VARGAS LINARES JENNYFER NAYDELIN", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "ACOSTA GUACARI KAREN LORENA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "CRUZ CISNEROS KENIA JOSELINE", domiciliaciones: 3, area: "EE MEXICO"},
+            {nombre: "ZABALA SERRANO KERLY SULIMA", domiciliaciones: 2, area: "COBRANZA LATAM"},
+            {nombre: "PARADA PEREZ KEVIN GEOVANNI", domiciliaciones: 9, area: "EE LATAM"},
+            {nombre: "BARRAGAN TRUJILLO LAURA VIVIANA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "BALLESTEROS SIERRA LEIDY DAYAN", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "GUTIERREZ PERDOMO LESLY JOHANNA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "HERNANDEZ  VILLAFRANCO LESLEY", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "MAYORGA MORALES LISSETH KATERINE", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "ROSAS VERA LEDYMAR YELITZA", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "ESPEJO MORENO MARIA ELOISA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "AVILA CRUZ MARISOL", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "CORONADO ARELLANO MARICARMEN", domiciliaciones: 10, area: "EE MEXICO"},
+            {nombre: "ESTRADA JIMENEZ MARIA ANEL", domiciliaciones: 2, area: "EE MEXICO"},
+            {nombre: "GOMEZ GARCIA MIRIAN GIANINA", domiciliaciones: 1, area: "COBRANZA LATAM"},
+            {nombre: "REYES GUZMAN MARIA DEL PILAR", domiciliaciones: 6, area: "EE MEXICO"},
+            {nombre: "VELA MONTOYA MARIANA", domiciliaciones: 4, area: "EE MEXICO"},
+            {nombre: "AVALOS MANCO NICKOL MILAGROS", domiciliaciones: 2, area: "COBRANZA LATAM"},
+            {nombre: "TORRES SOLANO ANDREA PAOLA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "SOLIS TEODORES PALOMA ELIZABETH", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "PARRA MORENO SAYDE VANESSA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "MIRANDA ORTIZ SHARON FERNANDA", domiciliaciones: 1, area: "EE MEXICO"},
+            {nombre: "MENDOZA SARMIENTO SONIA MARCELA", domiciliaciones: 7, area: "EE LATAM"},
+            {nombre: "IRINEO BARRERA VALERIA", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "LOMELI AGUILLON VERONICA ELIZABETH", domiciliaciones: 1, area: "COBRANZA MEXICO"},
+            {nombre: "VILLEGAS RODRIGUEZ VICTOR ANTONIO", domiciliaciones: 2, area: "EE MEXICO"},
+            {nombre: "RODRIGUEZ GUZMAN YEIMY YADNIRA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "RIOS OSPINO YESICA MARGARITA", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "MORENO HURTADO ZOILA NAYIBE", domiciliaciones: 1, area: "EE LATAM"},
+            {nombre: "AVILEZ MONZALVO ALBA ALICIA", domiciliaciones: 3, area: "BACK OFFICE"},
+            {nombre: "PEREA MARTINEZ HUMBERTO", domiciliaciones: 1, area: "BACK OFFICE"},
+            {nombre: "VERA NUÑEZ ISMAEL", domiciliaciones: 1, area: "BACK OFFICE"},
+            {nombre: "HUERTA GUTIERREZ JOSUE YUNNUELL", domiciliaciones: 1, area: "BACK OFFICE"},
+            {nombre: "REYES GONZALEZ MINERVA", domiciliaciones: 1, area: "BACK OFFICE"},
+            {nombre: "HERNANDEZ SERRANO DALILA PAMELA", domiciliaciones: 2, area: "BACK OFFICE"},
+        ];
+        // ============================================
+        // FIN DE DATOS - NO EDITES DEBAJO DE ESTA LÍNEA
+        // ============================================
+
+        let asesoresProcessed = [];
+        let filteredAsesores = [];
+        let currentPage = 1;
+        let rowsPerPage = 50;
+        let currentSort = { column: 3, ascending: false };
+
+        window.addEventListener('load', function() {
+            processData();
+        });
+
+        function processData() {
+            asesoresProcessed = datosAsesores.map((asesor, index) => {
+                const categoria = getCategoriaYPremio(asesor.domiciliaciones);
+                return {
+                    rank: index + 1,
+                    nombre: asesor.nombre,
+                    area: asesor.area || 'Sin área',
+                    domiciliaciones: asesor.domiciliaciones,
+                    categoria: categoria.categoria,
+                    premio: categoria.premio,
+                    categoriaTexto: getCategoriaTexto(categoria.categoria)
+                };
+            });
+
+            // Sort by domiciliaciones (highest first)
+            asesoresProcessed.sort((a, b) => b.domiciliaciones - a.domiciliaciones);
+            
+            // Update ranks after sorting
+            asesoresProcessed.forEach((asesor, index) => {
+                asesor.rank = index + 1;
+            });
+
+            filteredAsesores = [...asesoresProcessed];
+            
+            // Populate area filter
+            populateAreaFilter();
+            
+            updateStats(asesoresProcessed);
+            updateTopPerformers();
+            renderTable();
+        }
+
+        function getCategoriaYPremio(domiciliaciones) {
+            if (domiciliaciones >= 12) {
+                return { categoria: 'delantero', premio: '📺👕⚽' };
+            } else if (domiciliaciones >= 8) {
+                return { categoria: 'mediocampista', premio: '👕⚽' };
+            } else if (domiciliaciones >= 4) {
+                return { categoria: 'defensa', premio: '⚽' };
+            } else {
+                return { categoria: 'reserva', premio: '' };
+            }
+        }
+
+        function getCategoriaTexto(categoria) {
+            const textos = {
+                'delantero': 'Delantero',
+                'mediocampista': 'Mediocampista',
+                'defensa': 'Defensa',
+                'reserva': 'Reserva'
+            };
+            return textos[categoria] || categoria;
+        }
+
+        function populateAreaFilter() {
+            const areas = [...new Set(asesoresProcessed.map(a => a.area))].sort();
+            const areaFilter = document.getElementById('areaFilter');
+            
+            // Keep "Todas" option and add all unique areas
+            areaFilter.innerHTML = '<option value="all">Todas</option>';
+            areas.forEach(area => {
+                const option = document.createElement('option');
+                option.value = area;
+                option.textContent = area;
+                areaFilter.appendChild(option);
+            });
+        }
+
+        function updateTopPerformers() {
+            const limit = parseInt(document.getElementById('topLimit').value);
+            const topAsesores = asesoresProcessed.slice(0, limit);
+            
+            const delanteros = topAsesores.filter(a => a.categoria === 'delantero');
+            const mediocampistas = topAsesores.filter(a => a.categoria === 'mediocampista');
+            const defensas = topAsesores.filter(a => a.categoria === 'defensa');
+            const reservas = topAsesores.filter(a => a.categoria === 'reserva');
+
+            let html = '';
+
+            if (delanteros.length > 0) {
+                html += createZone('⭐ DELANTEROS', delanteros);
+            }
+            if (mediocampistas.length > 0) {
+                html += createZone('💪 MEDIOCAMPISTAS', mediocampistas);
+            }
+            if (defensas.length > 0) {
+                html += createZone('🛡️ DEFENSAS', defensas);
+            }
+            if (reservas.length > 0) {
+                html += createZone('📋 RESERVAS', reservas);
+            }
+
+            document.getElementById('fieldContent').innerHTML = html;
+        }
+
+        function createZone(title, players) {
+            let html = `
+                <div class="formation-zone">
+                    <div class="zone-title">${title}</div>
+                    <div class="players-row">
+            `;
+
+            players.forEach(player => {
+                const rankClass = player.rank === 1 ? 'gold' : 
+                                 player.rank === 2 ? 'silver' : 
+                                 player.rank === 3 ? 'bronze' : 'other';
+                
+                html += `
+                    <div class="player-card ${player.categoria}">
+                        <div class="rank-badge ${rankClass}">#${player.rank}</div>
+                        ${player.premio ? `<div class="prize-indicator">${player.premio}</div>` : ''}
+                        <div class="player-jersey">
+                            ${player.domiciliaciones}
+                        </div>
+                        <div class="player-name">${player.nombre}</div>
+                        <div style="font-size: 0.75em; color: #666; margin-top: 3px;">${player.area}</div>
+                        <div class="player-stats">
+                            <div class="stat">
+                                <div class="stat-value">${player.domiciliaciones}</div>
+                                <div class="stat-label">Domiciliaciones</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+
+            return html;
+        }
+
+        function updateStats(asesores) {
+            const delanteros = asesores.filter(a => a.categoria === 'delantero').length;
+            const mediocampistas = asesores.filter(a => a.categoria === 'mediocampista').length;
+            const defensas = asesores.filter(a => a.categoria === 'defensa').length;
+            const reservas = asesores.filter(a => a.categoria === 'reserva').length;
+            const totalDom = asesores.reduce((sum, a) => sum + a.domiciliaciones, 0);
+
+            document.getElementById('totalAsesores').textContent = asesores.length;
+            document.getElementById('totalDomiciliaciones').textContent = totalDom;
+            document.getElementById('delanteros').textContent = delanteros;
+            document.getElementById('mediocampistas').textContent = mediocampistas;
+            document.getElementById('defensas').textContent = defensas;
+            document.getElementById('reservas').textContent = reservas;
+        }
+
+        function renderTable() {
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = rowsPerPage === 'all' ? filteredAsesores.length : start + rowsPerPage;
+            const pageData = filteredAsesores.slice(start, end);
+
+            let html = '';
+            pageData.forEach(asesor => {
+                html += `
+                    <tr>
+                        <td><strong>#${asesor.rank}</strong></td>
+                        <td>${asesor.nombre}</td>
+                        <td><span class="area-badge">${asesor.area}</span></td>
+                        <td><strong>${asesor.domiciliaciones}</strong></td>
+                        <td><span class="categoria-badge ${asesor.categoria}">${asesor.categoriaTexto}</span></td>
+                        <td style="font-size: 1.5em;">${asesor.premio}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('tableBody').innerHTML = html;
+            renderPagination();
+        }
+
+        function renderPagination() {
+            if (rowsPerPage === 'all') {
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            const totalPages = Math.ceil(filteredAsesores.length / rowsPerPage);
+            let html = `
+                <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>← Anterior</button>
+                <span>Página ${currentPage} de ${totalPages}</span>
+                <button onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente →</button>
+            `;
+            document.getElementById('pagination').innerHTML = html;
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            renderTable();
+        }
+
+        function changeRowsPerPage() {
+            const value = document.getElementById('rowsPerPage').value;
+            rowsPerPage = value === 'all' ? 'all' : parseInt(value);
+            currentPage = 1;
+            renderTable();
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoriaFilter = document.getElementById('categoriaFilter').value;
+            const areaFilter = document.getElementById('areaFilter').value;
+
+            filteredAsesores = asesoresProcessed.filter(asesor => {
+                const matchesSearch = asesor.nombre.toLowerCase().includes(searchTerm);
+                const matchesCategoria = categoriaFilter === 'all' || asesor.categoria === categoriaFilter;
+                const matchesArea = areaFilter === 'all' || asesor.area === areaFilter;
+                return matchesSearch && matchesCategoria && matchesArea;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['rank', 'nombre', 'area', 'domiciliaciones', 'categoria', 'premio'];
+            const column = columns[columnIndex];
+
+            if (currentSort.column === columnIndex) {
+                currentSort.ascending = !currentSort.ascending;
+            } else {
+                currentSort.column = columnIndex;
+                currentSort.ascending = false;
+            }
+
+            filteredAsesores.sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                }
+
+                if (valA < valB) return currentSort.ascending ? -1 : 1;
+                if (valA > valB) return currentSort.ascending ? 1 : -1;
+                return 0;
+            });
+
+            // Update sort indicators
+            document.querySelectorAll('th').forEach((th, index) => {
+                th.classList.remove('sorted-asc', 'sorted-desc');
+                if (index === columnIndex) {
+                    th.classList.add(currentSort.ascending ? 'sorted-asc' : 'sorted-desc');
+                }
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+    </script>
+</body>
+</html>
